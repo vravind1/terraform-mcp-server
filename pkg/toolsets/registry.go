@@ -67,6 +67,8 @@ var AllTools = []ToolDef{
 	// Terraform - Runs and Plans
 	{Name: "list_runs", Toolset: Terraform, RequiresTFE: true},
 	{Name: "get_run_details", Toolset: Terraform, RequiresTFE: true},
+	{Name: "list_task_results", Toolset: Terraform, RequiresTFE: true},
+	{Name: "get_task_result_details", Toolset: Terraform, RequiresTFE: true},
 	{Name: "get_run_comments", Toolset: Terraform, RequiresTFE: true},
 	{Name: "create_run", Toolset: Terraform, RequiresTFE: true}, // Handle special case
 	{Name: "action_run", Toolset: Terraform, RequiresTFE: true, RequiresTFOps: true},

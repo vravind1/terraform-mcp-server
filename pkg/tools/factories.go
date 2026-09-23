@@ -65,16 +65,18 @@ var toolFactories = map[string]toolFactory{
 	"force_unlock_workspace":  tfeTools.ForceUnlockWorkspace,
 
 	// Terraform - Runs and Plans (create_run excepted, see above)
-	"list_runs":            tfeTools.ListRuns,
-	"get_run_details":      tfeTools.GetRunDetails,
-	"get_run_comments":     tfeTools.GetRunComments,
-	"action_run":           tfeTools.ActionRun,
-	"get_plan_details":     tfeTools.GetPlanDetails,
-	"get_plan_logs":        tfeTools.GetPlanLogs,
-	"get_plan_json_output": tfeTools.GetPlanJSONOutput,
-	"get_apply_details":    tfeTools.GetApplyDetails,
-	"get_apply_logs":       tfeTools.GetApplyLogs,
-	"get_sentinel_mock":    tfeTools.GetSentinelMock,
+	"list_runs":               tfeTools.ListRuns,
+	"get_run_details":         tfeTools.GetRunDetails,
+	"list_task_results":       tfeTools.ListTaskResults,
+	"get_task_result_details": tfeTools.GetTaskResultDetails,
+	"get_run_comments":        tfeTools.GetRunComments,
+	"action_run":              tfeTools.ActionRun,
+	"get_plan_details":        tfeTools.GetPlanDetails,
+	"get_plan_logs":           tfeTools.GetPlanLogs,
+	"get_plan_json_output":    tfeTools.GetPlanJSONOutput,
+	"get_apply_details":       tfeTools.GetApplyDetails,
+	"get_apply_logs":          tfeTools.GetApplyLogs,
+	"get_sentinel_mock":       tfeTools.GetSentinelMock,
 
 	// Terraform - Workspace Variables
 	"list_workspace_variables":  tfeTools.ListWorkspaceVariables,
