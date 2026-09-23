@@ -1,3 +1,10 @@
+# Unreleased
+
+FEATURES
+
+* [New Tool] `list_task_results` lists task execution results for a run, including stage status and individual task statuses.
+* [New Tool] `get_task_result_details` reads a task result, its paginated outcomes, and available outcome bodies in one call. Bodies that are unavailable or exceed the response budget are marked explicitly. Both task-result tools are read-only.
+
 # 1.3.1
 
 IMPROVEMENTS

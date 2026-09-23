@@ -41,6 +41,7 @@ The Terraform MCP server provides tools for generating better Terraform code thr
 - **Discovery**: `search_run` (empty query returns all) → `get_run_details` (supports json output)
 - **Operations**: `create_run` → `apply_run` OR `discard_run` OR `cancel_run`
 - **Monitoring**: `get_plan_details`/`get_plan_logs` for plans, `get_apply_details`/`get_apply_logs` for applies
+- **Task results (read-only)**: `list_task_results` with a `run_id` to identify the task and its status → `get_task_result_details` with that task's result ID for the task record, a page of outcomes, and available outcome bodies. Continue with `page`/`pageSize` if more outcome pages exist. Bodies can be `not_uploaded`, `unavailable`, or `omitted_size_limit`.
 - Always check run status before attempting operations
 
 ### Variable Management
@@ -75,7 +76,7 @@ The Terraform MCP server provides tools for generating better Terraform code thr
 
 ## Error Handling
 - Registry failures: Try private first (if token), fallback to public
-- Run failures: Check `get_run_details`, get_plan_details and logs before retry
+- Run failures: Check `get_run_details`, task results and outcomes, plan details, and logs before retry
 - Variable conflicts: `search_workspace_variables` first to avoid duplicates
 - Run stuck and holds the lock: `action_run` to cancel or discard the run → `force_unlock_workspace` to unlock the workspace
 
