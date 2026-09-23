@@ -26,7 +26,7 @@ const DefaultPublicRegistryURL = "https://registry.terraform.io"
 // CreateHTTPClient initializes a retryable HTTP client
 func CreateHTTPClient(insecureSkipVerify bool, logger *log.Logger) *http.Client {
 	retryClient := retryablehttp.NewClient()
-	retryClient.Logger = logger
+	retryClient.Logger = nil
 
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify},
@@ -36,6 +36,22 @@ func CreateHTTPClient(insecureSkipVerify bool, logger *log.Logger) *http.Client 
 	retryClient.HTTPClient = cleanhttp.DefaultClient()
 	retryClient.HTTPClient.Timeout = 10 * time.Second
 	retryClient.HTTPClient.Transport = transport
+	retryClient.HTTPClient.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if len(via) >= 5 {
+			return fmt.Errorf("too many redirects")
+		}
+		original := via[0].URL
+		req.Header.Del("Referer")
+		if req.URL.Scheme != "https" && (original.Scheme == "https" || !sameOrigin(original, req.URL)) {
+			return fmt.Errorf("insecure cross-origin redirect")
+		}
+		if !sameOrigin(original, req.URL) {
+			for _, header := range []string{"Authorization", "Proxy-Authorization", "Cookie", SharedSecretHeader, "X-Forwarded-For"} {
+				req.Header.Del(header)
+			}
+		}
+		return nil
+	}
 	retryClient.RetryMax = 3
 
 	retryClient.Backoff = func(min, max time.Duration, attemptNum int, resp *http.Response) time.Duration {
@@ -60,6 +76,10 @@ func CreateHTTPClient(insecureSkipVerify bool, logger *log.Logger) *http.Client 
 	}
 
 	return retryClient.StandardClient()
+}
+
+func sameOrigin(a, b *url.URL) bool {
+	return a.Scheme == b.Scheme && a.Host == b.Host
 }
 
 func SendRegistryCall(ctx context.Context, client *http.Client, method string, uri string, logger *log.Logger, callOptions ...string) ([]byte, error) {
